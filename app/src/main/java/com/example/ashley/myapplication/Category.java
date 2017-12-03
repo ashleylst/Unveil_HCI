@@ -36,7 +36,7 @@ public class Category extends AppCompatActivity {
     private List<Map<String, Object>> data_list;
     private SimpleAdapter adapter;
     private ImageButton btnclose;
-    private int[] icons = {R.drawable.logo, R.drawable.logo,R.drawable.logo,R.drawable.logo,R.drawable.logo,R.drawable.logo };
+    private int[] icons = {R.drawable.history, R.drawable.natural,R.drawable.popup,R.drawable.publicartworks,R.drawable.architecture,R.drawable.graffiti };
     private String[] text = {"111", "222", "333", "444", "555", "666"};
 
 
@@ -61,6 +61,17 @@ public class Category extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //Toast.makeText(Category.this, "你点击了第" + i, Toast.LENGTH_SHORT).show();
+                String category_name;
+                switch (i){
+                    case 0: category_name = "History"; break;
+                    case 1: category_name = "Natural Scenery"; break;
+                    case 2: category_name = "Pop-up Art"; break;
+                    case 3: category_name = "Public Artworks"; break;
+                    case 4: category_name = "Architecture"; break;
+                    case 5: category_name = "Graffiti"; break;
+                    default: category_name = "Error"; break;
+                }
+                Toast.makeText(Category.this, "You have selected " + category_name, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent();
                 intent.putExtra("text",true);
                 setResult(3,intent);

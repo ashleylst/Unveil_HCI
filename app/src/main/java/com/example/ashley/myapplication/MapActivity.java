@@ -360,8 +360,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
     public void SetMarkers() {
         markerslist.add(new Markers("Amsterdam Central Station", 52.377524, 4.900757));
-        markerslist.add(new Markers("Basilica of St Nicholas", 52.376600, 4.901100));
-        markerslist.add(new Markers("Schreiers Tower", 52.376535, 4.902276));
         markerslist.add(new Markers("Grand Hotel Amrath (Prins Hendrikkade 108)", 52.374421, 4.904043));
         markerslist.add(new Markers("Kikkerbilssluis", 52.372834, 4.907869));
         markerslist.add(new Markers("Hogeschool (Prins Hendrikkade 191)", 52.371220, 4.911683));
@@ -371,10 +369,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         markerslist.add(new Markers("De Gooyer", 52.366799, 4.926541));
         markerslist.add(new Markers("Admiraliteitslijnbaan(Werkspoormuseum)", 52.367946, 4.924320));
         markerslist.add(new Markers("PC Hoofthuis", 52.373553, 4.889660));
-        markerslist.add(new Markers("Magna Plaza", 52.373612, 4.890465));
         markerslist.add(new Markers("Dam Palace", 52.373206, 4.891431));
         markerslist.add(new Markers("Huis de Pinto", 52.370112, 4.900913));
-        markerslist.add(new Markers("Mozes & Aaron Church", 52.368356, 4.903400));
+        markerslist.add(new Markers("Oosterkerk", 52.370159, 4.919654));
         markerslist.add(new Markers("Desmet Studios", 52.366832, 4.909599));
         markerslist.add(new Markers("Artis: Aquarium", 52.364662, 4.918025));
         markerslist.add(new Markers("Muiderpoort", 52.363692, 4.919591));
