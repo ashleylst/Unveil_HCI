@@ -12,7 +12,11 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -136,8 +140,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
-    private CameraPosition mCameraPosition;
     private GeoDataClient mGeoDataClient;
+    private CameraPosition mCameraPosition;
 
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
@@ -194,8 +198,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 if (hasFocus) {//获得焦点
                     startp.setCursorVisible(true);
                     Intent intent = new Intent(MapActivity.this, SearchActivity.class);
-                    Bundle bundle=new Bundle();
-                    bundle.putInt("from",1);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("from", 1);
                     intent.putExtras(bundle);
                     startActivityForResult(intent, 1);
                 } else {
@@ -213,8 +217,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 if (hasFocus) {//获得焦点
                     endp.setCursorVisible(true);
                     Intent intent = new Intent(MapActivity.this, SearchActivity.class);
-                    Bundle bundle=new Bundle();
-                    bundle.putInt("from",2);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("from", 2);
                     intent.putExtras(bundle);
 
                     startActivityForResult(intent, 1);
@@ -333,13 +337,17 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         public double longtitude;
         public double latitude;
         public Marker marker;
+        public String description;
+        private String source;
         private boolean isPlayed = false;
 
-        public Markers(String name, double latitude, double longtitude) {
+        public Markers(String name, double latitude, double longtitude, String description, String source) {
             this.name_of_hotspot = name;
             this.longtitude = longtitude;
             this.latitude = latitude;
+            this.description = description;
             this.marker = initiate();
+            this.source = source;
         }
 
         public Marker initiate() {
@@ -347,11 +355,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                     .position(new LatLng(latitude, longtitude))
                     .title(name_of_hotspot)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.flag_2))
+                    .snippet(description)
             );
             return marker;
         }
 
-        protected void finalize(){
+        protected void finalize() {
             System.out.println("finalize");
         }
     }
@@ -359,34 +368,63 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     ArrayList markerslist = new ArrayList();
 
     public void SetMarkers() {
-        markerslist.add(new Markers("Amsterdam Central Station", 52.377524, 4.900757));
-        markerslist.add(new Markers("Grand Hotel Amrath (Prins Hendrikkade 108)", 52.374421, 4.904043));
-        markerslist.add(new Markers("Kikkerbilssluis", 52.372834, 4.907869));
-        markerslist.add(new Markers("Hogeschool (Prins Hendrikkade 191)", 52.371220, 4.911683));
-        markerslist.add(new Markers("Compagnie Pakhuizen (P.Hendrikkade 176)", 52.371568, 4.910036));
-        markerslist.add(new Markers("Pakhuizen (s-Gravenhekje 1a)", 52.372240, 4.907915));
-        markerslist.add(new Markers("Gebouw Batavia (Prins Hendrikkade 84)", 52.376770, 4.901615));
-        markerslist.add(new Markers("De Gooyer", 52.366799, 4.926541));
-        markerslist.add(new Markers("Admiraliteitslijnbaan(Werkspoormuseum)", 52.367946, 4.924320));
-        markerslist.add(new Markers("PC Hoofthuis", 52.373553, 4.889660));
-        markerslist.add(new Markers("Dam Palace", 52.373206, 4.891431));
-        markerslist.add(new Markers("Huis de Pinto", 52.370112, 4.900913));
-        markerslist.add(new Markers("Oosterkerk", 52.370159, 4.919654));
-        markerslist.add(new Markers("Desmet Studios", 52.366832, 4.909599));
-        markerslist.add(new Markers("Artis: Aquarium", 52.364662, 4.918025));
-        markerslist.add(new Markers("Muiderpoort", 52.363692, 4.919591));
-        markerslist.add(new Markers("Working-class Housing Berlage", 52.363677, 4.939922));
+        //markerslist.add(new Markers("Amsterdam Central Station", 52.377524, 4.900757,""));
+        //markerslist.add(new Markers("Grand Hotel Amrath (Prins Hendrikkade 108)", 52.374421, 4.904043));
+        //markerslist.add(new Markers("Kikkerbilssluis", 52.372834, 4.907869));
+        //markerslist.add(new Markers("Hogeschool (Prins Hendrikkade 191)", 52.371220, 4.911683));
+        //markerslist.add(new Markers("Compagnie Pakhuizen (P.Hendrikkade 176)", 52.371568, 4.910036));
+        //markerslist.add(new Markers("Pakhuizen (s-Gravenhekje 1a)", 52.372240, 4.907915));
+        //markerslist.add(new Markers("Gebouw Batavia (Prins Hendrikkade 84)", 52.376770, 4.901615));
+        //markerslist.add(new Markers("De Gooyer", 52.366799, 4.926541));
+        //markerslist.add(new Markers("Admiraliteitslijnbaan(Werkspoormuseum)", 52.367946, 4.924320));
+        // markerslist.add(new Markers("Oosterkerk", 52.370159, 4.919654, " "));
+        markerslist.add(new Markers("PC Hoofthuis",
+                52.373553,
+                4.889660,
+                "The ugliest building on the Spuistraat gets its name from the famous poet P.C. Hooft whose family home once stood here.",
+                "hoofthuis"));
+        markerslist.add(new Markers("Dam Palace",
+                52.373206,
+                4.891431,
+                "The Royal Palace is a beautiful example of Dutch Classicism, celebrating the Dutch Golden Age and the wealthy position of Amsterdam.",
+                "dampalace"));
+        markerslist.add(new Markers("Huis de Pinto",
+                52.370112,
+                4.900913,
+                "Squeezed in between modern building, this mansion was once built for one of the founders of the Dutch East Indies Company.",
+                "pinto"));
+
+        markerslist.add(new Markers("Desmet Studios",
+                52.366832,
+                4.909599,
+                "This former theatre was built according to the art deco style in the early 1920s.",
+                "desmet"));
+        markerslist.add(new Markers("Artis: Aquarium",
+                52.364662,
+                4.918025,
+                "Resembling an ancient Roman temple, the aquarium has a majestic appearance with its Corinthian columns and prominent entrance.",
+                "aquarium"));
+        markerslist.add(new Markers("Muiderpoort",
+                52.363692,
+                4.919591,
+                "The only surviving city gate from the 18th century lost its function early 20th century when traffic became too much to go through.",
+                "muiderpoort"));
+        markerslist.add(new Markers("Working-class Housing Berlage",
+                52.363677,
+                4.939922,
+                "Three housing blocks at the Javaplein were built by the famous architect Berlage according to his Rationalist style.",
+                "berlage"));
     }
 
-    private void DestroyMarkers(){
+    private void DestroyMarkers() {
         Iterator<Markers> iter = markerslist.iterator();
-        while (iter.hasNext())
-        {
+        while (iter.hasNext()) {
             Markers i = iter.next();
             i = null;
             System.gc();
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -542,27 +580,25 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
             @Override
             public void onClick(View v) {
-                //Toast.makeText(MapActivity.this, "Hello FAB!", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(MapActivity.this, "Hello FAB!", Toast.LENGTH_SHORT).show();
 
                 btnFab.setVisibility(View.GONE);
                 btnStop.setVisibility(View.VISIBLE);
                 Iterator<Markers> iter = markerslist.iterator();
-                while (iter.hasNext())
-                {
+                while (iter.hasNext()) {
                     iter.next().isPlayed = false;
                 }
                 UpdateLocation();
             }
         });
 
-        btnStop.setOnClickListener(new View.OnClickListener(){
+        btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 btnFab.setVisibility(View.VISIBLE);
                 btnStop.setVisibility(View.GONE);
                 Iterator<Markers> iter = markerslist.iterator();
-                while (iter.hasNext())
-                {
+                while (iter.hasNext()) {
                     iter.next().isPlayed = true;
                 }
             }
@@ -701,7 +737,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
                     TextView infotext = (TextView) v.findViewById(R.id.infotext);
 
+                    TextView infodes = (TextView) v.findViewById(R.id.infodes);
+
                     infotext.setText(marker.getTitle());
+                    infodes.setText(marker.getSnippet());
                     return v;
                 }
             });
@@ -837,6 +876,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     public void UpdateLocation() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         // 从GPS获取最近的定位信息
+
+        final Context m = this;
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -847,8 +888,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        Location location = locationManager
-                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location location = getLastKnownLocation();//locationManager
+                //.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+
         // 将location里的位置信息显示在EditText中
         Navigate(location);
         // 设置每2秒获取一次GPS的定位信息
@@ -870,6 +913,16 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                     public void onProviderEnabled(String provider) {
                         // 当GPS LocationProvider可用时，更新位置
 
+                        if (ActivityCompat.checkSelfPermission(m, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(m, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            return;
+                        }
                         Navigate(locationManager
                                 .getLastKnownLocation(provider));
 
@@ -882,23 +935,56 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 });
     }
 
-    public void Navigate(Location location)
-    {
+    MediaPlayer player;
+
+    public void Navigate(Location location) {
         Iterator<Markers> iterator = markerslist.iterator();
-        while (iterator.hasNext())
-        {
+        while (iterator.hasNext()) {
             Markers i = iterator.next();
             float result_d[] = new float[10];
             Location.distanceBetween(location.getLatitude(), location.getLongitude(), i.latitude, i.longtitude, result_d);
             String s = Float.toString(result_d[0]);
-            if( result_d[0] != 0f && !i.isPlayed )
-            {
+            if (result_d[0] <= 500f && !i.isPlayed) {
                 Toast.makeText(MapActivity.this, s, Toast.LENGTH_SHORT).show();
-                MediaPlayer player = MediaPlayer.create(MapActivity.this, R.raw.test);
+                String path = i.source;
+                int ResourceId = this.getResources().getIdentifier( path, "raw", this.getPackageName());
+                if(player != null)
+                {
+                    player.stop();
+                }
+                player = MediaPlayer.create(MapActivity.this, ResourceId);
                 player.start();
                 i.isPlayed = true;
                 break;
             }
         }
     }
+
+    private Location getLastKnownLocation() {
+        locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+        List<String> providers = locationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+
+            }
+            Location l = locationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
+    }
+
 }
