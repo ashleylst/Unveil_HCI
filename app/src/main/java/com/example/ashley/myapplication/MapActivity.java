@@ -339,15 +339,18 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         public Marker marker;
         public String description;
         private String source;
+        private String intro;
         private boolean isPlayed = false;
+        private boolean isIntro = false;
 
-        public Markers(String name, double latitude, double longtitude, String description, String source) {
+        public Markers(String name, double latitude, double longtitude, String description, String source, String intro) {
             this.name_of_hotspot = name;
             this.longtitude = longtitude;
             this.latitude = latitude;
             this.description = description;
             this.marker = initiate();
             this.source = source;
+            this.intro = intro;
         }
 
         public Marker initiate() {
@@ -382,38 +385,45 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 52.373553,
                 4.889660,
                 "The ugliest building on the Spuistraat gets its name from the famous poet P.C. Hooft whose family home once stood here.",
-                "hoofthuis"));
+                "hoofthuis",
+                "hoofthuisintro"));
         markerslist.add(new Markers("Dam Palace",
                 52.373206,
                 4.891431,
                 "The Royal Palace is a beautiful example of Dutch Classicism, celebrating the Dutch Golden Age and the wealthy position of Amsterdam.",
-                "dampalace"));
+                "dampalace",
+                "damintro"));
         markerslist.add(new Markers("Huis de Pinto",
                 52.370112,
                 4.900913,
                 "Squeezed in between modern building, this mansion was once built for one of the founders of the Dutch East Indies Company.",
-                "pinto"));
+                "pinto",
+                "pintointro"));
 
         markerslist.add(new Markers("Desmet Studios",
                 52.366832,
                 4.909599,
                 "This former theatre was built according to the art deco style in the early 1920s.",
-                "desmet"));
+                "desmet",
+                "desmetintro"));
         markerslist.add(new Markers("Artis: Aquarium",
                 52.364662,
                 4.918025,
                 "Resembling an ancient Roman temple, the aquarium has a majestic appearance with its Corinthian columns and prominent entrance.",
-                "aquarium"));
+                "aquarium",
+                "aquaintro"));
         markerslist.add(new Markers("Muiderpoort",
                 52.363692,
                 4.919591,
                 "The only surviving city gate from the 18th century lost its function early 20th century when traffic became too much to go through.",
-                "muiderpoort"));
+                "muiderpoort",
+                "muiderpoortintro"));
         markerslist.add(new Markers("Working-class Housing Berlage",
                 52.363677,
                 4.939922,
                 "Three housing blocks at the Javaplein were built by the famous architect Berlage according to his Rationalist style.",
-                "berlage"));
+                "berlage",
+                "berlageintro"));
     }
 
     private void DestroyMarkers() {
@@ -586,7 +596,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 btnStop.setVisibility(View.VISIBLE);
                 Iterator<Markers> iter = markerslist.iterator();
                 while (iter.hasNext()) {
-                    iter.next().isPlayed = false;
+                    Markers tmp = iter.next();
+                    tmp.isPlayed = false;
+                    tmp.isIntro = false;
                 }
                 UpdateLocation();
             }
@@ -599,7 +611,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 btnStop.setVisibility(View.GONE);
                 Iterator<Markers> iter = markerslist.iterator();
                 while (iter.hasNext()) {
-                    iter.next().isPlayed = true;
+                    Markers tmp = iter.next();
+                    tmp.isPlayed = true;
+                    tmp.isIntro = true;
+                }
+                if(player != null)
+                {
+                    player.stop();
                 }
             }
         });
@@ -944,7 +962,22 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             float result_d[] = new float[10];
             Location.distanceBetween(location.getLatitude(), location.getLongitude(), i.latitude, i.longtitude, result_d);
             String s = Float.toString(result_d[0]);
-            if (result_d[0] <= 500f && !i.isPlayed) {
+            if (result_d[0] <= 200f && result_d[0] >= 80f && !i.isIntro) {
+                Toast.makeText(MapActivity.this, s, Toast.LENGTH_SHORT).show();
+                String path = i.intro;
+                int ResourceId = this.getResources().getIdentifier( path, "raw", this.getPackageName());
+                if(player != null)
+                {
+                    player.stop();
+                }
+                player = MediaPlayer.create(MapActivity.this, ResourceId);
+                player.start();
+
+                i.isIntro = true;
+                break;
+            }
+            if(result_d[0] <= 80f && !i.isPlayed)
+            {
                 Toast.makeText(MapActivity.this, s, Toast.LENGTH_SHORT).show();
                 String path = i.source;
                 int ResourceId = this.getResources().getIdentifier( path, "raw", this.getPackageName());
@@ -954,6 +987,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 }
                 player = MediaPlayer.create(MapActivity.this, ResourceId);
                 player.start();
+
                 i.isPlayed = true;
                 break;
             }

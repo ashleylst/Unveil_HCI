@@ -37,7 +37,7 @@ public class Category extends AppCompatActivity {
     private SimpleAdapter adapter;
     private ImageButton btnclose;
     private int[] icons = {R.drawable.history, R.drawable.natural,R.drawable.popup,R.drawable.publicartworks,R.drawable.architecture,R.drawable.graffiti };
-    private String[] text = {"111", "222", "333", "444", "555", "666"};
+    //private String[] text = {"111", "222", "333", "444", "555", "666"};
 
 
     @Override
@@ -52,15 +52,15 @@ public class Category extends AppCompatActivity {
         data_list = new ArrayList<Map<String, Object>>();
         getData();
         //加载适配器
-        String[] form = {"image", "text"};
-        int[] to = {R.id.image, R.id.text};
+        String[] form = {"image"};
+        int[] to = {R.id.image};
         adapter = new SimpleAdapter(this, data_list, R.layout.item, form, to);
         gridView.setAdapter(adapter);
         //监听item每一项
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Toast.makeText(Category.this, "你点击了第" + i, Toast.LENGTH_SHORT).show();
+
                 String category_name;
                 switch (i){
                     case 0: category_name = "History"; break;
@@ -94,7 +94,7 @@ public class Category extends AppCompatActivity {
         for (int i = 0; i < icons.length; i++) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("image", icons[i]);
-            map.put("text", text[i]);
+            //map.put("text", text[i]);
             data_list.add(map);
         }
         return data_list;

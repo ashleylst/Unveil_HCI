@@ -32,9 +32,9 @@
         <activity
             android:name=".MainActivity"
             android:label="Unveil"
-            android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTask"
-            android:taskAffinity="">
+            android:taskAffinity=""
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,32 +45,27 @@
             android:name=".MapActivity"
             android:exported="true"
             android:label="Unveil"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".Category"
             android:exported="true"
             android:label="Unveil"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".Range"
             android:exported="true"
             android:label="Unveil"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".SearchActivity"
             android:exported="true"
             android:label="Unveil"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".LocationActivity"
+            android:name=".Introduction"
             android:exported="true"
             android:label="Unveil"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
