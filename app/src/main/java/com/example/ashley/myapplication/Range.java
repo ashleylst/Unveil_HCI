@@ -65,11 +65,11 @@ public class Range extends AppCompatActivity {
         //正在拖动时触发
         public void onProgressChanged(SeekBar seekBar, int progress,
                                       boolean fromUser) {
-            //showSeekText.append("正在拖动:"+seekBar.getProgress()+":"+fromUser+":"+progress+"\r\n");
+
         }
         //开始拖动时触发
         public void onStartTrackingTouch(SeekBar seekBar) {
-            //showSeekText.append("开始拖动:"+seekBar.getProgress()+"\r\n");
+
         }
         //拖动停止时触发
         public void onStopTrackingTouch(SeekBar seekBar) {
@@ -88,7 +88,7 @@ public class Range extends AppCompatActivity {
                     showSeekText2.setText("Maximum number of hotspots: " + seekBar.getProgress());
                     break;
             }
-            //showSeekText.append("停止拖动:"+seekBar.getProgress()+"\r\n");
+
         }
 
     }

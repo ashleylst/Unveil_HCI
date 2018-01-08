@@ -69,10 +69,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -988,6 +984,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 player = MediaPlayer.create(MapActivity.this, ResourceId);
                 player.start();
 
+                i.isIntro = true;
                 i.isPlayed = true;
                 break;
             }

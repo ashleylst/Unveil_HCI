@@ -65,11 +65,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     ImageView delete1;
     ImageView delete2;
 
-    //private static final int SHORT_DELAY = 1000; // 1 second
-
-    //设置数据源
-   // private static final String[] words={"abc","acd","ade"};
-
     public void FocusElsewhere()
     {
         final RelativeLayout rlytTimerName = (RelativeLayout) findViewById(R.id.RelativeLayout1);

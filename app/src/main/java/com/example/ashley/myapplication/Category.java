@@ -37,7 +37,7 @@ public class Category extends AppCompatActivity {
     private SimpleAdapter adapter;
     private ImageButton btnclose;
     private int[] icons = {R.drawable.history, R.drawable.natural,R.drawable.popup,R.drawable.publicartworks,R.drawable.architecture,R.drawable.graffiti };
-    //private String[] text = {"111", "222", "333", "444", "555", "666"};
+
 
 
     @Override
